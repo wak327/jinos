@@ -1,0 +1,6 @@
+# gdb -x tools/gdbinit   (after `ninja -C build debug`)
+set pagination off
+file build/kernel/siraj.elf
+target remote :1234
+break kmain
+continue

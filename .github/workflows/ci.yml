@@ -1,0 +1,17 @@
+name: boot
+on: [push, pull_request]
+jobs:
+  boot:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s -- 21
+          sudo apt-get install -y cmake ninja-build qemu-system-x86 ovmf xorriso mtools lld-21
+      - name: Configure
+        run: cmake -S . -B build -G Ninja
+      - name: Build
+        run: ninja -C build
+      - name: Boot test (BIOS and UEFI, 1 and 4 CPUs)
+        run: ninja -C build check
